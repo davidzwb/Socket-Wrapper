@@ -5,6 +5,8 @@ bool TcpStream::start()
     //server
     if (flags == AI_PASSIVE)
     {
+        setSoReuseAddr();
+
         if (bind() == -1)
             return false;
 
@@ -82,4 +84,27 @@ int TcpStream::readALL(char *buf, int len)
 int TcpStream::readSome(char *buf, int len)
 {
     return ::read(sockfd_, buf, len);
+}
+
+int TcpStream::shutDownWrite()
+{
+    return ::shutdown(sockfd_, SHUT_WR);
+}
+
+int TcpStream::shutDownRead()
+{
+    return ::shutdown(sockfd_, SHUT_RD);
+}
+
+void TcpStream::setSoReuseAddr()
+{
+    int optval = 1;
+
+    std::cout << "sock reuse addr" << std::endl;
+
+    if (setsockopt(sockfd_, SOL_SOCKET, SO_REUSEADDR, &optval, sizeof(optval)) < 0)
+    {
+        perror("setsockopt SO_REUSEADDR error");
+        exit(-1);
+    }
 }

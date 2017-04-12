@@ -26,6 +26,11 @@ public:
     int writeSome(const char *buf, int len);
     int readALL(char *buf, int len);
     int readSome(char *buf, int len);
+
+    int shutDownWrite();
+    int shutDownRead();
+
+    void setSoReuseAddr();
 };
 
 #endif // TCPSTREAM_H
